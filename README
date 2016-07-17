@@ -1,0 +1,46 @@
+Before you start:
+Instructions assume you are using Linux.
+You'll need a DHCP server and a TFTP server. 
+These instructions need ethernet so will
+only work with the full version of the Peach.
+
+-- Flashing U-boot --
+
+Connect the Peach via usb. Run dmesg and check
+that you see the mbed debugger and the serial
+port. Make a note of node the serial port was
+assigned. It should be ttyACM0 in most cases.
+
+In one shell run:
+minicom -D /dev/ttyACM0 <-- Replace if different
+
+In another shell run:
+openocd -f renesas_rza1h_swd.cfg
+
+You should see openocd detect the RZ/A1H..
+
+Then in yet another run:
+arm-none-eabi-gdb
+
+Once gdb is running enter the following commands:
+
+target remote localhost:3333
+load /path/to/u-boot-ram
+c
+
+You should now see u-boot start up on the serial
+console.
+
+Copy u-boot-spiflash to u-boot at the root of your
+tftp server. If your tftp server address is not
+192.168.2.1 you need to the following on the u-boot console:
+setenv serverip <your tftp ip>
+
+Finally download u-boot from the server and write it to
+the spi flash like so:
+run writeuboot
+
+If everything worked you should be able to press the reset
+button on the Peach and see the u-boot console appear.
+If not reload the ram version of u-boot with GDB and try
+again.
