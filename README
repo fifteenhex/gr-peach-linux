@@ -25,6 +25,7 @@ arm-none-eabi-gdb
 Once gdb is running enter the following commands:
 
 target remote localhost:3333
+monitor target reset halt
 load /path/to/u-boot-ram
 c
 
