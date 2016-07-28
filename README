@@ -45,3 +45,20 @@ If everything worked you should be able to press the reset
 button on the Peach and see the u-boot console appear.
 If not reload the ram version of u-boot with GDB and try
 again.
+
+-- Building the kernel and device and writing them -- 
+
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- xipImage
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- dtbs
+
+copy arch/arm/boot/dts/r7s72100-grpeach.dtb and arch/arm/boot/xipImage
+
+-- Building a rootfs and writing it --
+
+Download buildroot from https://buildroot.org/download.html
+Extract buildroot.
+Copy buildroot.config to .config in the buildroot dir
+Copy busybox.config to busybox.config in the buildroot dir
+Run make
+Copy output/images/rootfs.squashfs to the root of your tftp server as root.romfs
+In u-boot run "run writerootfs"
